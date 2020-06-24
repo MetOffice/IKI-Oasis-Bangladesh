@@ -1,5 +1,5 @@
 # IKI Oasis Bangladesh
-
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/) 
 <p align="center">
 <!-- Github Sheilds - comment out until repo is public -->
 <!-- https://shields.io/ is a good source of these -->
@@ -13,10 +13,8 @@
           alt="Commits since last release" /></a>
 <img src="https://img.shields.io/github/repo-size/MetOffice/IKI-Oasis-Bangladesh.svg"
     alt="Repo size" /></a>
-<img src=" https://img.shields.io/github/license/MetOffice/IKI-Oasis-Bangladesh"
-    alt="License" /></a> 
     </p>
-<br> -->
+<br>
 
 ## Overview
 This study is part of the [Oasis Platform for Climate and Catastrophe Risk Assessment – Asia](https://www.international-climate-initiative.com/en/nc/details/project/oasis-platform-for-climate-and-catastrophe-risk-assessment-asia-18_II_165-3018), a project funded by the International Climate Initiative (IKI), supported by the Federal Ministry for the Environment, Nature Conservation and Nuclear Safety, based on a decision of the German Bundestag.
