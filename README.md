@@ -25,6 +25,6 @@ This study is part of the [Oasis Platform for Climate and Catastrophe Risk Asses
 All code and data relating to this project is licenced under CC-BY-4.0
 
 <h5 align="center">
-<img src="notebooks/img/MO_MASTER_black_mono_for_light_backg_RBG.png" width="200" alt="Met Office"> <br>
+<img src="img/MO_MASTER_black_mono_for_light_backg_RBG.png" width="200" alt="Met Office logo"> <img src="img/BMU_logo.png" width="200" alt="Federal Minister for the Environment, Nature Conservation, and Nuclear Safety logo"> <img src="img/Oasis_logo.jpg" width="200" alt="Oasis logo"><br>
 &copy; British Crown Copyright 2018 - 2019, Met Office
 </h5>
