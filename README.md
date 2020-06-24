@@ -1,13 +1,9 @@
 # IKI Oasis Bangladesh
 
-<h4 align="center">
-PyPRECIS is the python based training environment for Met Office PRECIS training courses.
-</h4>
-
 <p align="center">
 <!-- Github Sheilds - comment out until repo is public -->
 <!-- https://shields.io/ is a good source of these -->
-<!-- <a href="https://github.com/MetOffice/IKI-Oasis-Bangladesh/releases">
+<a href="https://github.com/MetOffice/IKI-Oasis-Bangladesh/releases">
     <img src="https://img.shields.io/github/tag/MetOffice/IKI-Oasis-Bangladesh.svg"
         alt="Latest version" /></a>
 <img src="https://img.shields.io/github/release-date/MetOffice/IKI-Oasis-Bangladesh.svg"
@@ -17,6 +13,8 @@ PyPRECIS is the python based training environment for Met Office PRECIS training
           alt="Commits since last release" /></a>
 <img src="https://img.shields.io/github/repo-size/MetOffice/IKI-Oasis-Bangladesh.svg"
     alt="Repo size" /></a>
+<img src=" https://img.shields.io/github/license/MetOffice/IKI-Oasis-Bangladesh"
+    alt="License" /></a> 
     </p>
 <br> -->
 
