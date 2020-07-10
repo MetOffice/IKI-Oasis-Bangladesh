@@ -22,10 +22,10 @@
 <br>
 
 ## Overview
-This repositry contains code accompyning articles [TBC] and [TBC].  It is part of the [Oasis Platform for Climate and Catastrophe Risk Assessment – Asia](https://www.international-climate-initiative.com/en/nc/details/project/oasis-platform-for-climate-and-catastrophe-risk-assessment-asia-18_II_165-3018), a project funded by the [International Climate Initiative (IKI)](https://www.international-climate-initiative.com/en), supported by the Federal Ministry for the Environment, Nature Conservation and Nuclear Safety, based on a decision of the German Bundestag.
+This repositry contains code accompanying articles [TBC], [TBC] and [doi:10.5194/egusphere-egu2020-7721](https://doi.org/10.5194/egusphere-egu2020-7721).  It is part of the [Oasis Platform for Climate and Catastrophe Risk Assessment – Asia](https://www.international-climate-initiative.com/en/nc/details/project/oasis-platform-for-climate-and-catastrophe-risk-assessment-asia-18_II_165-3018), a project funded by the [International Climate Initiative (IKI)](https://www.international-climate-initiative.com/en), supported by the Federal Ministry for the Environment, Nature Conservation and Nuclear Safety, based on a decision of the German Bundestag.
 
 ## Code
-Note that some paths have been removed for security purposes.  Some python packages used in the code in this repository are not publically available.
+Note that some paths have been removed for information security purposes.  Some python packages used in the code in this repository are not publically available, mainly `ascend` used for masking netCDF files using shapefiles.
 
 ## Data
 Data relating to this project is available from [TBC]. Additional data used within data processing scripts are stored in `/sup` using [git lfs](https://help.github.com/en/github/managing-large-files/about-git-large-file-storage).  
