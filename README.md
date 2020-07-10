@@ -28,7 +28,9 @@ This repositry contains code accompanying articles [TBC], [TBC] and [doi:10.5194
 Note that some paths have been removed for information security purposes.  Some python packages used in the code in this repository are not publically available, mainly `ascend` used for masking netCDF files using shapefiles.
 
 ## Data
-Data relating to this project is available from [TBC]. Additional data used within data processing scripts are stored in `/sup` using [git lfs](https://help.github.com/en/github/managing-large-files/about-git-large-file-storage).  
+Data relating to this project is available from [TBC]. Additional data used within data processing scripts are stored in `/sup` using [git lfs](https://help.github.com/en/github/managing-large-files/about-git-large-file-storage).
+
+Source data used by the code, and its ouput is available from [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3600201.svg)](https://doi.org/10.5281/zenodo.3600201)
 
 ## Licence
 All code and data relating to this project is licenced under CC-BY-4.0
