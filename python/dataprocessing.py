@@ -5,9 +5,8 @@ Data processing functions relating to the IKI Bangladesh project.
 
 Note: Python 3 compatible only
 
-Author: Hamish Steptoe (hamish.steptoe@metoffice.gov.uk)
+Author: HS
 Created: 7/3/19
-QA:
 '''
 import datetime
 import math
@@ -176,11 +175,6 @@ def get_wspd_ts(path, storm, res, shpmask):
     ucube = ucube.intersection(longitude=(75, 100), latitude=(10, 25))
     vcube = vcube.intersection(longitude=(75, 100), latitude=(10, 25))
 
-    # wspd_ufunc = np.frompyfunc(calc_wspd, 2, 1)
-    # wspd = iris.analysis.maths.apply_ufunc(wspd_ufunc, ucube, vcube,
-    #                                        new_name='wind speed', new_unit='m s-1',
-    #                                        in_place=False)
-    
     ws_ifunc = iris.analysis.maths.IFunc(calc_wspd, ws_units_func)
     ws_cube = ws_ifunc(ucube, vcube, new_name='wind speed')
 

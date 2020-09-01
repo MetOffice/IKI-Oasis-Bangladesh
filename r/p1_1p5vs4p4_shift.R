@@ -5,7 +5,6 @@
 # As the data exist at different resolution, we compare distribution rather than absolute values.
 #
 # Author: HS
-
 # Load libraries
 library(RNetCDF)
 library(reshape2)
@@ -25,7 +24,7 @@ NCNAME <- 'wind_speed_of_gust'
 # VAR <- 'psl.T1Hmin'
 # NCNAME <- 'air_pressure_at_sea_level'
 
-INDIR <- ''
+INDIR <- ''  # Path to netCDF files
 # Set lat-lon limits c(min, max)
 LAT <- c(20.503502, 25.3)
 LON <- c(87.8, 92.942)
@@ -106,7 +105,7 @@ ggsave(paste("1p4vs4p4_hsf_", VAR, ".png", sep = ''), hsfplot)
 plot_hsf_pb_dist <- function(data,
                              null_value = 0,
                              point_interv = "mode_hdi",
-                             interval_width = c(0.5, 0.9),
+                             interval_width = c(0.95),
                              fill_colour = "orange",
                              int_colour = "black"
 ){
@@ -140,7 +139,7 @@ plot_hsf_pb_dist <- function(data,
   suppressMessages(p)
 }
 
-dist <- plot_hsf_pb_dist(h, point_interv = 'median')
+dist <- plot_hsf_pb_dist(h, point_interv = 'median_hdi')
 dist$labels$y <- "1.5km percentiles"
 dist$labels$x <- "Difference (knots)"
 dist + scale_y_discrete(breaks=c("0.01", "0.05", "0.1", "0.2", "0.3", "0.4", "0.5", "0.6", "0.7", "0.8", "0.9", "0.95", "0.99"),

@@ -10,14 +10,13 @@ Uses dask to parallelise the process. Run on SPICE.
 #SBATCH --ntasks=14
 #SBATCH --time=00-00:10:00
 #SBATCH --export=NONE
-module load scitools
+
 python3 -u s7_validation_difference.py
 
-Note: Python 3 compatible only.
+Python 3 compatible only.
 
 Author: HS
 Created: 26/5/20
-QA:
 '''
 import os
 
@@ -67,15 +66,17 @@ def process_storm(dfrow):
     # loading the downsclaed data
     gust44 = dp.get_ds_storm_ts(HCNC, 'fg.T1Hmax', dfrow.NAME, RES, shpmask=val_shape)
     pres44 = dp.get_ds_storm_ts(HCNC, 'psl.T1Hmin', dfrow.NAME, RES, shpmask=val_shape)
+    wind44 = dp.get_wspd_ts(HCNC, dfrow.NAME, RES, shpmask=val_shape)
     pres44 = pres44 / 100  # Convert to hPa
     # converting gust units m/sec to knots
     gust44 = dp.mpsec_to_knots(gust44)
+    wind44 = dp.mpsec_to_knots(wind44)
     # Define time bounds for plotting
     starttime = gust44.index[0]  # start time of downscaled data
     endtime = gust44.index[-1]  # Get end time from last step of last run of downscaled
     # loading ibtracs data
     ibtracs = dp.get_ibtracs_ts(IBTRACSFILE, dfrow.IBID)[starttime:endtime]
-    # loading ERA5 data
+    # loading ERA5 data, wind speeds are converted to knots within the dp routine
     era5 = dp.get_era5_ts(ERA5DIR, dfrow.NAME, shpmask=val_shape)[starttime:endtime]
     era5.PRES = era5.PRES / 100  # Convert to hPa
 
@@ -85,6 +86,11 @@ def process_storm(dfrow):
                             'DIFF_TYPE': 'gust',
                             'INTDIFF': gust44.max() - era5.GUST.max(),
                             'TIMEDIFF': _to_hours(gust44.idxmax() - era5.GUST.idxmax())})
+    era5dfw = pd.DataFrame({'DIFF_WRT': 'ERA5',
+                            'STORM': dfrow.NAME,
+                            'DIFF_TYPE': 'wind',
+                            'INTDIFF': wind44.max() - era5.WIND.max(),
+                            'TIMEDIFF': _to_hours(wind44.idxmax() - era5.WIND.idxmax())})
     era5dfp = pd.DataFrame({'DIFF_WRT': 'ERA5',
                             'STORM': dfrow.NAME,
                             'DIFF_TYPE': 'mslp',
@@ -100,9 +106,9 @@ def process_storm(dfrow):
     # New Delhi Differences
     nddfg = pd.DataFrame({'DIFF_WRT': 'IBND',
                           'STORM': dfrow.NAME,
-                          'DIFF_TYPE': 'gust',
-                          'INTDIFF': gust44.max() - ibtracs.NEWDELHI_WIND.max(),
-                          'TIMEDIFF': _to_hours(pd.Series(matirxdiff(gust44.idxmax().values, ibnd_wdiff)))})
+                          'DIFF_TYPE': 'wind',
+                          'INTDIFF': wind44.max() - ibtracs.NEWDELHI_WIND.max(),
+                          'TIMEDIFF': _to_hours(pd.Series(matirxdiff(wind44.idxmax().values, ibnd_wdiff)))})
     nddfp = pd.DataFrame({'DIFF_WRT': 'IBND',
                           'STORM': dfrow.NAME,
                           'DIFF_TYPE': 'mslp',
@@ -111,9 +117,9 @@ def process_storm(dfrow):
     # US Differences
     usdfg = pd.DataFrame({'DIFF_WRT': 'IBUS',
                           'STORM': dfrow.NAME,
-                          'DIFF_TYPE': 'gust',
-                          'INTDIFF': gust44.max() - ibtracs.USA_WIND.max(),
-                          'TIMEDIFF': _to_hours(pd.Series(matirxdiff(gust44.idxmax().values, ibus_wdiff)))})
+                          'DIFF_TYPE': 'wind',
+                          'INTDIFF': wind44.max() - ibtracs.USA_WIND.max(),
+                          'TIMEDIFF': _to_hours(pd.Series(matirxdiff(wind44.idxmax().values, ibus_wdiff)))})
     usdfp = pd.DataFrame({'DIFF_WRT': 'IBUS',
                           'STORM': dfrow.NAME,
                           'DIFF_TYPE': 'mslp',
@@ -122,7 +128,7 @@ def process_storm(dfrow):
 
     # Return differnce dataframes
     print(f'Done {dfrow.NAME}!')
-    return pd.concat([usdfg, usdfp, nddfg, nddfp, era5dfg, era5dfp], ignore_index=True)
+    return pd.concat([usdfg, usdfp, nddfg, nddfp, era5dfg, era5dfp, era5dfw], ignore_index=True)
 
 
 # Pandas to matplotlib datetime conversion handling etc.
