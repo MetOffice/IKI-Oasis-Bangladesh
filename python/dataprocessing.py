@@ -5,8 +5,9 @@ Data processing functions relating to the IKI Bangladesh project.
 
 Note: Python 3 compatible only
 
-Author: HS
+Author: Hamish Steptoe (hamish.steptoe@metoffice.gov.uk)
 Created: 7/3/19
+QA:
 '''
 import datetime
 import math
@@ -148,8 +149,12 @@ def calc_wspd(u, v):
     """
     function calculates the wind speed from wind components
     """
-    return math.sqrt(u ** 2 + v ** 2)
+    return np.sqrt(u ** 2 + v ** 2)
 
+def ws_units_func(u_cube, v_cube):
+    if u_cube.units != getattr(v_cube, 'units', u_cube.units):
+        raise ValueError("units do not match")
+    return u_cube.units
 
 def get_wspd_ts(path, storm, res, shpmask):
     """
@@ -171,15 +176,19 @@ def get_wspd_ts(path, storm, res, shpmask):
     ucube = ucube.intersection(longitude=(75, 100), latitude=(10, 25))
     vcube = vcube.intersection(longitude=(75, 100), latitude=(10, 25))
 
-    wspd_ufunc = np.frompyfunc(calc_wspd, 2, 1)
-    wspd = iris.analysis.maths.apply_ufunc(wspd_ufunc, ucube, vcube,
-                                           new_name='wind speed', new_unit='meter per second',
-                                           in_place=False)
+    # wspd_ufunc = np.frompyfunc(calc_wspd, 2, 1)
+    # wspd = iris.analysis.maths.apply_ufunc(wspd_ufunc, ucube, vcube,
+    #                                        new_name='wind speed', new_unit='m s-1',
+    #                                        in_place=False)
+    
+    ws_ifunc = iris.analysis.maths.IFunc(calc_wspd, ws_units_func)
+    ws_cube = ws_ifunc(ucube, vcube, new_name='wind speed')
+
     try:
-        mwspd = shpmask.mask_cube(wspd)
+        mwspd = shpmask.mask_cube(ws_cube)
     except:
         print("Can't mask with shape! Masked over lon-lat box instead...")
-        mwspd = wspd
+        mwspd = ws_cube
     
     cubedata = []
     timedata = []
@@ -280,27 +289,41 @@ def get_era5_ts(indir, storm, shpmask):
         Pandas dataframe
     """
     wfile = f"{indir}/era5.*.{storm}.global.hourly.nc"
-    wcube = iris.load_cube(wfile, '10 metre wind gust since previous post-processing')
+    ucube = iris.load_cube(wfile, '10 metre U wind component')
+    vcube = iris.load_cube(wfile, '10 metre V wind component')
+    gube = iris.load_cube(wfile, '10 metre wind gust since previous post-processing')
     pcube = iris.load_cube(wfile, 'air_pressure_at_mean_sea_level')
-    wcube = wcube.intersection(longitude=(75, 100), latitude=(10, 25))
-    pcube = pcube.intersection(longitude=(75, 100), latitude=(10, 25))
     
+    gube = gube.intersection(longitude=(75, 100), latitude=(10, 25))
+    pcube = pcube.intersection(longitude=(75, 100), latitude=(10, 25))
+    ucube = ucube.intersection(longitude=(75, 100), latitude=(10, 25))
+    vcube = vcube.intersection(longitude=(75, 100), latitude=(10, 25))
+    
+    # Calculate wind speed
+    ws_ifunc = iris.analysis.maths.IFunc(calc_wspd, ws_units_func)
+    wcube = ws_ifunc(ucube, vcube, new_name='10 meter wind speed')
+
     try:
-        mwcube = shpmask.mask_cube(wcube)
+        mgcube = shpmask.mask_cube(gube)
         mpcube = shpmask.mask_cube(pcube)
+        mwcube = shpmask.mask_cube(wcube)
     except:
         print("Can't mask with shape! Masked over lon-lat box instead...")
-        mwcube = wcube
+        mgcube = gube
         mpcube = pcube
+        mwcube = wcube
     
     
-    tcoord = mwcube.coord('time')
+    tcoord = mgcube.coord('time')
     tdata = tcoord.units.num2date(tcoord.points)
 
-    wind = mwcube.collapsed(['latitude', 'longitude'], iris.analysis.MAX)
+    gust = mgcube.collapsed(['latitude', 'longitude'], iris.analysis.MAX)
     pressure = mpcube.collapsed(['latitude', 'longitude'], iris.analysis.MIN)
+    wind = mwcube.collapsed(['latitude', 'longitude'], iris.analysis.MAX)
 
-    return pd.DataFrame(data={"GUST": mpsec_to_knots(wind.data), "PRES": pressure.data}, index=tdata)
+    return pd.DataFrame(data={"GUST": mpsec_to_knots(gust.data), 
+                              "PRES": pressure.data,
+                              "WIND": mpsec_to_knots(wind.data)}, index=tdata)
 
 
 def mpsec_to_knots(data):
