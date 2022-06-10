@@ -22,14 +22,14 @@ library(doParallel)
 
 # Set global variables
 ROOTDIR = ""
-STORMNAME <- 'MORA'
+STORMNAME <- 'VIYARU'
 VAR <- 'fg.T1Hmax'
 RES <- '4p4'
-INDIR <- paste(ROOTDIR, "", sep = "")
+INDIR <- paste(ROOTDIR, "netcdf", sep = "")
 
 USEWEIGHTS <- FALSE
 
-QUANTILES <- c(0.01, 0.05, 0.10, 0.5, 0.9, 0.95, 0.99)
+QUANTILES <- c(0.5, 0.8, 0.9, 0.95, 0.96, 0.98, 0.99, 0.995)
 
 registerDoParallel(cores = 4)
 
