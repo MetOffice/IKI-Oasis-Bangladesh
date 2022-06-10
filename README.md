@@ -15,8 +15,8 @@
 <a href="https://creativecommons.org/licenses/by/4.0/">
     <img src="https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg"
         alt="CC-BY 4.0" /></a>
-<a href="https://zenodo.org/badge/latestdoi/10.5281/zenodo.3953773">
-    <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.3953773.svg"
+<a href="https://zenodo.org/badge/latestdoi/10.5281/zenodo.3953772">
+    <img src="https://zenodo.org/badge/DOI/10.5281/zenodo.3953772.svg"
         alt="zenodo" /></a>
     </p>
 <br>
