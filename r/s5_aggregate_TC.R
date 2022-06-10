@@ -28,9 +28,9 @@ INDIR <- ""
 
 USEWEIGHTS <- FALSE
 
-QUANTILES <- c(0.01, 0.05, 0.10, 0.5, 0.9, 0.95, 0.99)
+QUANTILES <- c(0.5, 0.8, 0.9, 0.95, 0.96, 0.98, 0.99, 0.995)
 
-registerDoParallel(cores = 4)
+registerDoParallel(cores = 8)
 
 n.sims <- 1000  # No. of simulations from posterior predictive distribution
 
@@ -58,7 +58,7 @@ rmvn <- function(n,mu,sig) { ## MVN random deviates
 }
 
 # Set-up out file
-outfile <- "grand_fp_preds.Rdata"
+outfile <- "grand.fp.preds.Rdata"
 
 if (!(file.exists(outfile))) {
   # Loop over storms
@@ -67,8 +67,8 @@ if (!(file.exists(outfile))) {
     # Get RData file
     if (isTRUE(USEWEIGHTS)) {
       inmodel <-
-        paste(
-          "/fp.wmodel.",
+        paste(INDIR,
+          "fp.wmodel.",
           VAR,
           ".",
           STORMNAMES[s],
@@ -79,7 +79,7 @@ if (!(file.exists(outfile))) {
         )
     } else {
       inmodel <-
-        paste(
+        paste(INDIR,
           "fp.model.",
           VAR,
           ".",
@@ -97,7 +97,7 @@ if (!(file.exists(outfile))) {
       X <- predict(model, newdata = lonlat,type = "lpmatrix")
       Mean <- X[,1:num.knots] %*% t(betas[,1:num.knots])  ## 1000 values from the posterior of the mean (of the Gaussian)
       LPsd <- X[,(num.knots+1):(num.knots*2)] %*% t(betas[,(num.knots+1):(num.knots*2)])
-      Sd <- exp(LPsd + 0.01) # as per ?gaulss
+      Sd <- exp(LPsd) + 0.01 # as per ?gaulss
 
       # Make sequence of indicies for the large pred array for each loop along STORMNAMES
       # ie. first storm = i{1,1000}
@@ -144,7 +144,7 @@ gustquantile <- abind(qlist, along = 0)
 # Write out netCDF file
 if (isTRUE(USEWEIGHTS)) {
   outfile <-
-    paste(
+    paste(INDIR,
       "fpgrandw.",
       VAR,
       ".",
@@ -154,7 +154,7 @@ if (isTRUE(USEWEIGHTS)) {
     )
 } else {
   outfile <-
-    paste(
+    paste(INDIR,
       "fpgrand.",
       VAR,
       ".",
