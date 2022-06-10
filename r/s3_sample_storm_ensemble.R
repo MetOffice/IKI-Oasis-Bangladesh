@@ -124,7 +124,7 @@ X <- predict(model,newdata = newd,type = "lpmatrix") ## model matrix
 
 Mean <- X[, 1:num.knots] %*% t(betas[, 1:num.knots])  ## 1000 values from the posterior of the mean (of the Gaussian)
 LPsd <- X[,(num.knots+1):(num.knots*2)] %*% t(betas[,(num.knots+1):(num.knots*2)])
-Sd <- exp(LPsd + 0.01) # as per ?gaulss
+Sd <- exp(LPsd) + 0.01 # as per ?gaulss
 
 # simulate from predictive distribution (noting that the conditional is Log-Normal)
 preds <- matrix(ncol = nrow(newd), nrow = n.sims)
